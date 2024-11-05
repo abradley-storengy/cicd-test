@@ -1,0 +1,75 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - develop
+      - production
+  pull_request:
+    branches:
+      - develop
+      - production
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+env:
+  AWS_REGION: eu-west-2
+  working_dir: "."
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    strategy:
+      matrix:
+        node-version: ["20.17.0"]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: rm -rf node_modules/
+    - run: npm install
+    - run: npm run analysis
+    - run: rm -rf node_modules/
+    - run: npm install --production
+    - run: npm run package
+    - uses: actions/upload-artifact@v4
+      with:
+        name: pre-s3-upload-artifact
+        path: package.zip
+    - name: get-npm-version
+      id: package-version
+      uses: martinbeentjes/npm-get-version-action@v1.3.1
+    - name: Set output npm package version
+      id: output1
+      run: echo "appver=${{ steps.package-version.outputs.current-version}}" >> $GITHUB_OUTPUT
+    outputs:
+      output1: ${{ steps.output1.outputs.appver }}
+
+  package:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/production'
+    needs: build
+    env:
+      APPVER: ${{needs.build.outputs.output1}}
+    steps:
+      - run: echo "Packaging app version ${{ env.APPVER }}"
+      - uses: actions/checkout@v4
+      - name: Download packaged artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pre-s3-upload-artifact
+
