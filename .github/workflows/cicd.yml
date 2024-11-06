@@ -83,7 +83,10 @@ jobs:
   package:
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref_type == tag || github.event.pull_request.merged == true
+    if: |
+      always()
+      && needs.build.result == 'success'
+      && (github.ref_type == 'tag' || github.event.pull_request.merged == true)
     env:
       APPVER: ${{needs.build.outputs.output1}}
     steps:
