@@ -32,7 +32,6 @@ jobs:
         run: |
           git config --global user.name "GitHub Automation"
           git config --global user.email "alex.bradley@storengy.co.uk"
-      - run: chmod +x scripts/version/*
       - run: scripts/version/release
         if: github.ref == 'refs/heads/production' && startsWith(github.head_ref, 'release/')
       - run: scripts/version/hotfix
