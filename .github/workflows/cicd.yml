@@ -54,6 +54,9 @@ jobs:
       && github.event.pull_request.draft == false
 
     steps:
+    - run: |
+        echo ${{ github.ref }}
+        echo ${{ github.ref_type }}
     - uses: actions/checkout@v4
       with:
         ref: ${{ github.ref }}
