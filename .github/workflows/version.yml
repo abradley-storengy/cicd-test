@@ -1,0 +1,43 @@
+name: Bump Version
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - production
+    types:
+      - closed
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump-version:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ["20.17.0"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Git config
+        run: |
+          git config --global user.name "GitHub Automation"
+          git config --global user.email "alex.bradley@storengy.co.uk"
+      - run: scripts/version/release
+        if: github.ref == 'refs/heads/production' && startsWith(github.head_ref, 'release/')
+      - run: scripts/version/hotfix
+        if: github.ref == 'refs/heads/production' && startsWith(github.head_ref, 'hotfix/')
+      - run: scripts/version/build
+        if: github.ref == 'refs/heads/develop'
+      - run: git push --follow-tags
+      - run: npm pkg get version
+

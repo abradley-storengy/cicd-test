@@ -1,0 +1,3 @@
+#!/bin/bash
+source $(dirname $0)/get-version-nums
+npm version "$MAJOR_NUM.$MINOR_NUM.$((PATCH_NUM + 1))" --ignore-scripts

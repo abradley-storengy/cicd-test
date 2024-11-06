@@ -1,0 +1,6 @@
+#!/bin/bash
+VERSION_NUMS=($(npm pkg get version | sed -nr 's/^"([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9]+))?"$/\1 \2 \3 \5/p'))
+MAJOR_NUM=${VERSION_NUMS[0]-0}
+MINOR_NUM=${VERSION_NUMS[1]-0}
+PATCH_NUM=${VERSION_NUMS[2]-0}
+BUILD_NUM=${VERSION_NUMS[3]-0}
