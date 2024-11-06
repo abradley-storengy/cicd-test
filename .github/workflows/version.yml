@@ -28,13 +28,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - name: Git config
-        env:
-          PR_OBJ: ${{ toJson(github.event.pull_request) }}
-        run: |
-          echo "$PR_OBJ"
-          git config --global user.name "${{ github.event.pull_request.merged_by.name }}"
-          git config --global user.email "${{ github.event.pull_request.merged_by.email }}"
+      - uses: fregante/setup-git-user@v2.0.2
       - name: Bump minor version
         run: scripts/version/release
         if: github.ref == 'refs/heads/production' && startsWith(github.head_ref, 'release/')
@@ -44,6 +38,5 @@ jobs:
       - name: Bump build version
         run: scripts/version/build
         if: github.ref == 'refs/heads/develop'
-      - name: Push version bump
-        run: git push --follow-tags
+      - run: git push --follow-tags
 
