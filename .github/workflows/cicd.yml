@@ -46,7 +46,11 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
+    needs: bump-version
+    if: |
+      always()
+      && (needs.bump-version.result == 'success' || needs.bump-version.result == 'skipped')
+      && github.event.pull_request.draft == false
 
     steps:
     - uses: actions/checkout@v4
