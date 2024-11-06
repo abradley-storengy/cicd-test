@@ -32,8 +32,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: git branch --show-current
-      - uses: actions/setup-node@v4 # only requirement is npm so any node version is fine
-      - uses: fregante/setup-git-user@v2.0.2
+      - uses: actions/setup-node@v4
+      - uses: fregante/setup-git-user@v2
       - name: Bump minor version
         run: scripts/version/release
         if: github.ref == 'refs/heads/production' && startsWith(github.head_ref, 'release/')
@@ -52,7 +52,6 @@ jobs:
     strategy:
       matrix:
         node-version: ["20.17.0"]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
       - uses: actions/checkout@v4
