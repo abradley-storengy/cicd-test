@@ -29,15 +29,21 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Git config
+        env:
+          PR_OBJ: ${{ toJson(github.event.pull_request) }}
         run: |
+          echo "$PR_OBJ"
           git config --global user.name "${{ github.event.pull_request.merged_by.name }}"
           git config --global user.email "${{ github.event.pull_request.merged_by.email }}"
-      - run: scripts/version/release
+      - name: Bump minor version
+        run: scripts/version/release
         if: github.ref == 'refs/heads/production' && startsWith(github.head_ref, 'release/')
-      - run: scripts/version/hotfix
+      - name: Bump patch version
+        run: scripts/version/hotfix
         if: github.ref == 'refs/heads/production' && startsWith(github.head_ref, 'hotfix/')
-      - run: scripts/version/build
+      - name: Bump build version
+        run: scripts/version/build
         if: github.ref == 'refs/heads/develop'
-      - run: git push --follow-tags
-      - run: npm pkg get version
+      - name: Push version bump
+        run: git push --follow-tags
 
