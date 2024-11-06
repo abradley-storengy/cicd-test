@@ -30,8 +30,8 @@ jobs:
           cache: 'npm'
       - name: Git config
         run: |
-          git config --global user.name "GitHub Automation"
-          git config --global user.email "alex.bradley@storengy.co.uk"
+          git config --global user.name "${{ github.event.pull_request.merged_by.name }}"
+          git config --global user.email "${{ github.event.pull_request.merged_by.email }}"
       - run: scripts/version/release
         if: github.ref == 'refs/heads/production' && startsWith(github.head_ref, 'release/')
       - run: scripts/version/hotfix
