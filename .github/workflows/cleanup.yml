@@ -2,8 +2,6 @@ name: Workflow Clean-Up
 
 on:
   workflow_run:
-    workflows:
-      - Node.js CI
     types:
       - completed
 
