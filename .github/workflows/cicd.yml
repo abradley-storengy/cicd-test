@@ -39,6 +39,9 @@ jobs:
         node-version: '20.17.0'
         cache: 'npm'
     - uses: fregante/setup-git-user@v2
+    - env:
+        GITHUB_OBJ: ${{ toJson(github) }}
+      run: echo "$GITHUB_OBJ"
     - name: Bump minor version
       run: scripts/version/release
       if: github.event.pull_request.base.ref == 'refs/heads/production' && startsWith(github.head_ref, 'release/')
