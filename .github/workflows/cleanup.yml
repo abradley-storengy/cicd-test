@@ -9,19 +9,21 @@ on:
 
 permissions:
   id-token: write
-  contents: write
-  pull-requests: write
+  contents: read
+  actions: write
 
 jobs:
   clean-up:
     runs-on: ubuntu-latest
     steps:
+      # Delete CI workflow that were entirely skipped
       - uses: Mattraks/delete-workflow-runs@v2.0.6
         with:
           delete_workflow_pattern: 'Node.js CI'
           delete_run_by_conclusion_pattern: 'skipped'
           keep_minimum_runs: 0
           retain_days: 0
+      # Delete previous runs of this workflow to avoid clutter
       - uses: Mattraks/delete-workflow-runs@v2.0.6
         with:
           delete_workflow_pattern: 'Workflow Clean-Up'
