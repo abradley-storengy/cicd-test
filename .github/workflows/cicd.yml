@@ -27,15 +27,10 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false && (github.event.pull_request.state == 'open' || github.event.pull_request.merged == true)
+    if: github.event.pull_request.draft == false && (github.event.action != 'closed' || github.event.pull_request.merged == true)
 
     steps:
-    - env:
-        GITHUB_OBJ: ${{ toJson(github) }}
-      run: echo "$GITHUB_OBJ"
     - uses: actions/checkout@v4
-      with:
-        ref: ${{ github.ref }}
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
@@ -81,8 +76,6 @@ jobs:
     steps:
       - run: echo "Packaging app version ${{ env.APPVER }}"
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
       - name: Download packaged artifact
         uses: actions/download-artifact@v4
         with:
