@@ -27,9 +27,12 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
+    if: github.event.pull_request.draft == false && (github.event.pull_request.state == 'open' || github.event.pull_request.merged == true)
 
     steps:
+    - env:
+        GITHUB_OBJ: ${{ toJson(github) }}
+      run: echo "$GITHUB_OBJ"
     - uses: actions/checkout@v4
       with:
         ref: ${{ github.ref }}
@@ -39,9 +42,6 @@ jobs:
         node-version: '20.17.0'
         cache: 'npm'
     - uses: fregante/setup-git-user@v2
-    - env:
-        GITHUB_OBJ: ${{ toJson(github) }}
-      run: echo "$GITHUB_OBJ"
     - name: Bump minor version
       run: scripts/version/release
       if: github.base_ref == 'production' && startsWith(github.head_ref, 'release/')
