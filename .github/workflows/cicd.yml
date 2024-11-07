@@ -44,13 +44,13 @@ jobs:
       run: echo "$GITHUB_OBJ"
     - name: Bump minor version
       run: scripts/version/release
-      if: github.event.pull_request.base.ref == 'refs/heads/production' && startsWith(github.head_ref, 'release/')
+      if: github.base_ref == 'production' && startsWith(github.head_ref, 'release/')
     - name: Bump patch version
       run: scripts/version/hotfix
-      if: github.event.pull_request.base.ref == 'refs/heads/production' && startsWith(github.head_ref, 'hotfix/')
+      if: github.base_ref == 'production' && startsWith(github.head_ref, 'hotfix/')
     - name: Bump build version
       run: scripts/version/build
-      if: github.event.pull_request.base.ref == 'refs/heads/develop'
+      if: github.base_ref == 'develop'
     - name: Push version bump (PR merged)
       run: git push --follow-tags
       if: github.event.pull_request.merged == true
