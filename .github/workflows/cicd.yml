@@ -30,6 +30,9 @@ jobs:
     if: github.event.pull_request.draft == false
 
     steps:
+    - env:
+        GITHUB_OBJ: ${{ toJson(github) }}
+      run: echo "$GITHUB_OBJ"
     - uses: actions/checkout@v4
       with:
         ref: ${{ github.ref }}
@@ -39,9 +42,6 @@ jobs:
         node-version: '20.17.0'
         cache: 'npm'
     - uses: fregante/setup-git-user@v2
-    - env:
-        GITHUB_OBJ: ${{ toJson(github) }}
-      run: echo "$GITHUB_OBJ"
     - name: Bump minor version
       run: scripts/version/release
       if: github.base_ref == 'production' && startsWith(github.head_ref, 'release/')
