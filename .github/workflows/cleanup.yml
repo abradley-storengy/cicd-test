@@ -21,10 +21,12 @@ jobs:
           delete_workflow_pattern: 'Node.js CI'
           delete_run_by_conclusion_pattern: 'skipped'
           keep_minimum_runs: 0
+          retain_days: 0
           dry_run: true
       - uses: Mattraks/delete-workflow-runs@v2.0.6
         with:
           delete_workflow_pattern: 'Workflow Clean-Up'
           keep_minimum_runs: 0
+          retain_days: 0
           dry_run: true
 
