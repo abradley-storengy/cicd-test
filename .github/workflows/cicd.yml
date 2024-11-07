@@ -41,13 +41,13 @@ jobs:
     - uses: fregante/setup-git-user@v2
     - name: Bump minor version
       run: scripts/version/release
-      if: github.ref == 'refs/heads/production' && startsWith(github.head_ref, 'release/')
+      if: github.event.pull_request.base.ref == 'refs/heads/production' && startsWith(github.head_ref, 'release/')
     - name: Bump patch version
       run: scripts/version/hotfix
-      if: github.ref == 'refs/heads/production' && startsWith(github.head_ref, 'hotfix/')
+      if: github.event.pull_request.base.ref == 'refs/heads/production' && startsWith(github.head_ref, 'hotfix/')
     - name: Bump build version
       run: scripts/version/build
-      if: github.ref == 'refs/heads/develop'
+      if: github.event.pull_request.base.ref == 'refs/heads/develop'
     - name: Push version bump (PR merged)
       run: git push --follow-tags
       if: github.event.pull_request.merged == true
@@ -65,7 +65,7 @@ jobs:
       uses: martinbeentjes/npm-get-version-action@v1.3.1
     - name: Set output npm package version
       id: output1
-      run: echo "appver=${{ steps.package-version.outputs.current-version}}" >> $GITHUB_OUTPUT
+      run: echo "appver=${{ steps.package-version.outputs.current-version }}" >> $GITHUB_OUTPUT
     outputs:
       output1: ${{ steps.output1.outputs.appver }}
 
