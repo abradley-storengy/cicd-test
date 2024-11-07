@@ -1,0 +1,30 @@
+name: Workflow Clean-Up
+
+on:
+  workflow_run:
+    workflows:
+      - Node.js CI
+    types:
+      - completed
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  clean-up:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Mattraks/delete-workflow-runs@v2.0.6
+        with:
+          delete_workflow_pattern: 'Node.js CI'
+          delete_run_by_conclusion_pattern: 'skipped'
+          keep_minimum_runs: 0
+          dry_run: true
+      - uses: Mattraks/delete-workflow-runs@v2.0.6
+        with:
+          delete_workflow_pattern: 'Workflow Clean-Up'
+          keep_minimum_runs: 0
+          dry_run: true
+
