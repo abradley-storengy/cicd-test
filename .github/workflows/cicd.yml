@@ -30,9 +30,6 @@ jobs:
     if: github.event.pull_request.draft == false && (github.event.pull_request.state == 'open' || github.event.pull_request.merged == true)
 
     steps:
-    - env:
-        GITHUB_OBJ: ${{ toJson(github) }}
-      run: echo "$GITHUB_OBJ"
     - uses: actions/checkout@v4
       with:
         ref: ${{ github.ref }}
