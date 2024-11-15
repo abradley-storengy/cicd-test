@@ -76,6 +76,8 @@ jobs:
     steps:
       - run: echo "Packaging app version ${{ env.APPVER }}"
       - uses: actions/checkout@v4
+        with:
+          ref: v${{ env.APPVER }}
       - name: Download packaged artifact
         uses: actions/download-artifact@v4
         with:
