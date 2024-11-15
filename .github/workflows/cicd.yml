@@ -80,4 +80,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: pre-s3-upload-artifact
+      - name: Get version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+      - name: Show version
+        run: |
+          echo "appver=${{ steps.package-version.outputs.current-version }}"
+          echo "${{ steps.package-version.outputs }}"
+
 
