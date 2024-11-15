@@ -61,8 +61,11 @@ jobs:
     - name: get-npm-version
       id: package-version
       uses: martinbeentjes/npm-get-version-action@v1.3.1
+    - name: Set output npm package version
+      id: output1
+      run: echo "appver=${{ steps.package-version.outputs.current-version }}" >> $GITHUB_OUTPUT
     outputs:
-      output1: ${{ steps.package-version.outputs.current_version }}
+      output1: ${{ steps.output1.outputs.appver }}
 
   package:
     runs-on: ubuntu-latest
