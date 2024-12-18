@@ -24,14 +24,19 @@ jobs:
           node-version: '16'
       - name: Get tag
         id: get-tag
-        run: echo "current_tag=$(git tag --contains)" >> $GITHUB_OUTPUT
-      - name: Bump version
-        if: ${{ steps.get-tag.outputs.current_tag }} == ''
         run: |
-          npm version patch
-          git push --follow-tags
+          TAGS=($(git tag --contains))
+          TAG=${TAG[0]}
+          if [ -z $TAG ]; then
+            TAG=$(npm version patch)
+            git push --follow-tags
+          fi
+          echo "Tag: $TAG"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
       - name: Create Release
         id: create_release
         uses: ncipollo/release-action@v1
         with:
+          tag: ${{ steps.get-tag.outputs.tag }}
           generateReleaseNotes: true
+
