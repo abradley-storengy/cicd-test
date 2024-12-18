@@ -25,6 +25,7 @@ jobs:
       - name: Get tag
         id: get-tag
         run: |
+          git tag --contains
           TAGS=($(git tag --contains))
           TAG=${TAG[0]}
           if [ -z $TAG ]; then
