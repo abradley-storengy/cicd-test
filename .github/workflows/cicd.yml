@@ -19,7 +19,6 @@ jobs:
         uses: actions/checkout@master
         with:
           fetch-tags: true
-          ref: ${{ github.ref }}
       - uses: fregante/setup-git-user@v2
       - name: Set Up Node
         uses: actions/setup-node@master
@@ -28,9 +27,8 @@ jobs:
       - name: Get tag
         id: get-tag
         run: |
-          git tag --contains
-          TAGS=($(git tag --contains))
-          TAG=${TAG[0]}
+          TAG_LIST=($(git tag --contains))
+          TAG=${TAG_LIST[0]}
           if [ -z $TAG ]; then
             TAG=$(npm version patch)
             git push --follow-tags
