@@ -19,7 +19,7 @@ jobs:
         run: echo Starting...
   stop-runner:
     runs-on: ubuntu-latest
-    needs: [start-runner, build]
+    needs: build
     if: ${{ always() }}
     steps:
       - name: Stop
