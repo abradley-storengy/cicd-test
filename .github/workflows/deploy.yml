@@ -1,0 +1,22 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      appver:
+        description: 'App Version'
+        required: true
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: APPVER
+        run: echo ${{ github.event.inputs.appver }}
+      - name: SKIP_APPROVAL
+        run: echo ${{ github.event.inputs.skip_approval }}
