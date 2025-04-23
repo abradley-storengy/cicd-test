@@ -20,4 +20,4 @@ jobs:
         run: echo ${{ github.event.inputs.appver }}
       - name: Approval
         if: ${{ github.event.inputs.skip_approval }} != false
-        run: echo
+        run: echo Approved
