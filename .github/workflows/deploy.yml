@@ -19,5 +19,8 @@ jobs:
       - name: APPVER
         run: echo ${{ github.event.inputs.appver }}
       - name: Approval
-        if: ${{ github.event.inputs.skip_approval }} != false
+        if: ${{ github.event.inputs.skip_approval }} != true
         run: echo Approved
+      - name: Approval Skipped
+        if: ${{ github.event.inputs.skip_approval }} == true
+        run: echo Approval skipped

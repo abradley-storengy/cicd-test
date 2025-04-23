@@ -1,0 +1,32 @@
+name: auto-deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      appver:
+        description: 'App Version'
+        required: true
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger deploy
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: 'abradley-storengy',
+              repo: 'cicd-test',
+              workflow_id: 'deploy.yml',
+              ref: 'develop',
+              inputs: {
+                appver: '${{ github.event.inputs.appver }}',
+                skip_approval: true
+              }
+            })
