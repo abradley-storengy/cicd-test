@@ -6,21 +6,27 @@ on:
       appver:
         description: 'App Version'
         required: true
+  schedule:
+    - cron: '* * * * *'
 
 permissions:
   id-token: write
   contents: write
   pull-requests: write
 
+env:
+  appver: ${{ inputs.app_ver }}
+  skip_approval: ${{ inputs.app_ver }} == ""
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: APPVER
-        run: echo ${{ github.event.inputs.appver }}
+        run: echo ${{ env.appver }}
       - name: Approval
-        if: ${{ github.event.inputs.skip_approval }} != true
+        if: ${{ env.skip_approval }} != true
         run: echo Approved
       - name: Approval Skipped
-        if: ${{ github.event.inputs.skip_approval }} == true
+        if: ${{ env.skip_approval }} == true
         run: echo Approval skipped
