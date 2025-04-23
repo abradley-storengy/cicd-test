@@ -18,5 +18,6 @@ jobs:
     steps:
       - name: APPVER
         run: echo ${{ github.event.inputs.appver }}
-      - name: SKIP_APPROVAL
-        run: echo ${{ github.event.inputs.skip_approval }}
+      - name: Approval
+        if: ${{ github.event.inputs.skip_approval }} != false
+        run: echo 
