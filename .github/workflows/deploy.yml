@@ -6,8 +6,6 @@ on:
       appver:
         description: 'App Version'
         required: true
-  schedule:
-    - cron: '* * * * *'
 
 permissions:
   id-token: write
