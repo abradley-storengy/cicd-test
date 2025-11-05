@@ -1,0 +1,27 @@
+name: Update Jira Ticket
+
+on:
+  workflow_dispatch:
+    inputs:
+      ticketNumber:
+        description: Ticket Number
+        required: true
+
+jobs:
+  update-ticket:
+    name: Update Ticket
+    runs-on: ubuntu-latest
+    steps:
+      - name: Jira Login
+        uses: frieder/gha-jira-login@v1
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_API_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_API_USER }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Update Ticket
+        id: updateTicket
+        uses: frieder/jira-issue-updater@v1
+        with:
+          issue: ${{ inputs.ticketNumber }}
+          customfields: |
+            status: Awaiting Approval
