@@ -23,5 +23,5 @@ jobs:
         uses: frieder/jira-issue-transition@v1
         with:
           issue: ${{ inputs.ticketNumber }}
-          transition: Awaiting Approval
+          transition: Release to OPS
           failOnError: false
