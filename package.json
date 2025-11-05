@@ -1,6 +1,6 @@
 {
   "name": "cicd-test",
-  "version": "1.10.11",
+  "version": "1.10.12",
   "main": "index.js",
   "directories": {
     "test": "test"
