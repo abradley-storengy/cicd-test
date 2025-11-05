@@ -24,3 +24,4 @@ jobs:
         with:
           issue: ${{ inputs.ticketNumber }}
           transition: Awaiting Approval
+          failOnError: false
