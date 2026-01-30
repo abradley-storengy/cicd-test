@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - develop
+  pull_request:
+    branches:
+      - develop
 
 permissions:
   id-token: write
@@ -17,7 +20,7 @@ jobs:
     if: github.ref_type == 'branch'
     steps:
       - name: Dump context
-        run: echo ${{ github.event }}
+        run: echo ${{ toJson(github) }}
       - name: Checkout code
         uses: actions/checkout@master
         with:
